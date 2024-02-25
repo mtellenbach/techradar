@@ -1,26 +1,33 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const bodyParser = require('body-parser');
+require('dotenv').config();
+const mongoose = require('mongoose');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const db = mongoose.connection;
 
-var app = express();
+const uri = process.env.MONGODB_URI;
+const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+mongoose.connect(uri, clientOptions);
 
-app.use(logger('dev'));
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('Database connected successfully');
+});
+
+const usersRouter = require('./routes/user');
+const organisationsRouter = require('./routes/organisation');
+const technologiesRouter = require('./routes/technology');
+
+const app = express();
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json())
 
-app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/organisations', organisationsRouter);
+app.use('/technologies', technologiesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
