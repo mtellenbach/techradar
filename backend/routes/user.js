@@ -6,7 +6,6 @@ const Organisation = require("../models/organisation");
 const verify = require('./../middleware/authMiddleware')
 
 
-// User registration
 router.post('/create', verify(['sysadmin']), async (req, res) => {
   const user = new User({
     username: req.body.username,
@@ -23,13 +22,16 @@ router.post('/create', verify(['sysadmin']), async (req, res) => {
   }
 });
 
-// User login
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
-    const user = await User.findOne({ username });
+    let user = await User.findOne({ username });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      let user = await User.findOne({ email: username });
+
+      if (!user) {
+        return res.status(404).json({message: 'User not found'});
+      }
     }
 
     const passwordMatch = await user.comparePassword(password);
@@ -37,9 +39,11 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Incorrect password' });
     }
 
-    const token = jwt.sign({ userId: user.user_id, role: user.role }, process.env.SECRET_KEY, {
-      expiresIn: '1 hour'
-    });
+    const token = jwt.sign({ userId: user.user_id, role: user.role, organisation_id: user.organisation_id },
+      process.env.SECRET_KEY, {
+        expiresIn: '1 hour'
+      }
+    );
     res.json({ token });
     res.status(200).json({ token });
   } catch (error) {

@@ -1,4 +1,5 @@
 const createError = require('http-errors');
+const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
 require('dotenv').config();
@@ -17,17 +18,20 @@ db.once('open', function() {
 });
 
 const usersRouter = require('./routes/user');
+const changeLogRouter = require('./routes/changelog');
 const organisationsRouter = require('./routes/organisation');
 const technologiesRouter = require('./routes/technology');
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json())
 
 app.use('/users', usersRouter);
 app.use('/organisations', organisationsRouter);
 app.use('/technologies', technologiesRouter);
+app.use('/changelogs', changeLogRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
