@@ -1,7 +1,7 @@
 export interface ChangeLog {
   _id: string;
-  _changelog_id: string;
-  _technology_id: string;
-  _version_increment: string;
-  _created_at: string;
+  changelog_id: string;
+  technology_id: string;
+  version_increment: string;
+  created_at: string;
 }

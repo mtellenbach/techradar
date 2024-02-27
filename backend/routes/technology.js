@@ -83,9 +83,9 @@ router.put('/', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
             });
 
         await createChangeLog(technology.technology_id)
-        res.status(200).json(technology);
+        return res.status(200).json(technology);
     } catch (error) {
-        res.status(500).json({ error: 'Could not update technology' });
+        return res.status(500).json({ error: 'Could not update technology' });
     }
 });
 
@@ -102,9 +102,9 @@ router.put('/publish', verify(['sysadmin', 'cto', 'techlead']), async (req, res)
                 updated_at: Date.now()
             });
         await createChangeLog(technology.technology_id)
-        res.status(200).json(technology);
+        return res.status(200).json(technology);
     } catch (error) {
-        res.status(500).json({ error: 'Could not update technology' });
+        return res.status(500).json({ error: 'Could not update technology' });
     }
 });
 
@@ -117,9 +117,9 @@ router.put('/delete', verify(['sysadmin', 'cto', 'techlead']), async (req, res) 
                 deleted_at: Date.now()
             }
             );
-        res.status(200).json(`Deleted technology ${technology.name}`);
+        return res.status(200).json(`Deleted technology ${technology.name}`);
     } catch (error) {
-        res.status(500).json({ error: "Unable to delete technology" });
+        return res.status(500).json({ error: "Unable to delete technology" });
     }
 })
 

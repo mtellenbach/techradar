@@ -7,9 +7,15 @@ import {AppComponent} from './app.component';
 import {LoginComponent} from './components/login/login.component';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {UsersComponent} from './components/users/users.component';
-import {TechnologyComponent} from './technology/technology.component';
 import {HttpClientModule} from "@angular/common/http";
-import {JwtHelperService} from "@auth0/angular-jwt";
+import { TechnologyDetailComponent } from './components/technology-detail/technology-detail.component';
+import { TechnologyEditComponent } from './components/technology-edit/technology-edit.component';
+import { OrganisationListComponent } from './components/organisation-list/organisation-list.component';
+import { OrganisationEditComponent } from './components/organisation-edit/organisation-edit.component';
+import { OrganisationCreateComponent } from './components/organisation-create/organisation-create.component';
+import { TechnologyCreateComponent } from './components/technology-create/technology-create.component';
+import { UserCreateComponent } from './components/user-create/user-create.component';
+import { UserEditComponent } from './components/user-edit/user-edit.component';
 
 
 @NgModule({
@@ -18,7 +24,14 @@ import {JwtHelperService} from "@auth0/angular-jwt";
         LoginComponent,
         DashboardComponent,
         UsersComponent,
-        TechnologyComponent,
+        TechnologyDetailComponent,
+        TechnologyEditComponent,
+        OrganisationListComponent,
+        OrganisationEditComponent,
+        OrganisationCreateComponent,
+        TechnologyCreateComponent,
+        UserCreateComponent,
+        UserEditComponent,
     ],
     imports: [
         BrowserModule,

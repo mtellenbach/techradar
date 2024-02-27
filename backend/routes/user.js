@@ -4,6 +4,8 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const Organisation = require("../models/organisation");
 const verify = require('./../middleware/authMiddleware')
+const Technology = require("../models/technology");
+const {v4: uuidv4} = require("uuid");
 
 
 router.post('/create', verify(['sysadmin']), async (req, res) => {
@@ -58,5 +60,59 @@ router.get('/', verify(['sysadmin']), async (req, res) => {
     return res.status(500).json({ error: 'Unable to find users' });
   }
 });
+
+
+router.get('/:id', verify(['sysadmin']), async (req, res) => {
+  try {
+    const user = await User.findOne({ user_id: req.params.id });
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({ error: 'Unable to find organisations' });
+  }
+});
+
+
+router.get('/getByOrg/:id', verify(['sysadmin']), async (req, res) => {
+  try {
+    const user = await User.find({ organisation_id: req.params.id });
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({ error: 'Unable to find organisations' });
+  }
+});
+
+router.put('/', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
+  try {
+    const user = await User.findOneAndUpdate(
+        {
+          user_id: req.body.user_id,
+          deleted_at: null
+        },
+        {
+          user_id: req.body.user_id,
+          username: req.body.username,
+          password: req.body.password,
+          email: req.body.email,
+          role: req.body.role,
+          organisation_id: req.body.organisation_id,
+          updated_at: Date.now,
+        });
+
+    return res.status(200).json(technology);
+  } catch (error) {
+    return res.status(500).json({ error: 'Could not update user' });
+  }
+});
+
+router.delete('/', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
+  try {
+    const { user_id } = req.body;
+    const user = await Organisation.findOneAndDelete({ user_id: user_id });
+    return res.status(200).json(`Deleted user ${user.name}`);
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ error: "Unable to delete user" });
+  }
+})
 
 module.exports = router;
