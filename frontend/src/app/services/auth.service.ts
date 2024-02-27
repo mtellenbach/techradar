@@ -1,42 +1,53 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {User} from "../models/user.type";
 import {Router} from "@angular/router";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthService {
+    jwtHelper: JwtHelperService = new JwtHelperService();
+    token: string | null = localStorage.getItem('token');
+    user: User | null = this.jwtHelper.decodeToken(this.token ? this.token : "");
 
-  token: string|null = localStorage.getItem('token');
-
-  constructor(private authService: AuthService, private router: Router) {}
-
-  getCurrentUser(): User|null {
-    const jwtHelper = new JwtHelperService();
-    if (!this.token) {
-      return null;
+    constructor(private router: Router) {
     }
-    const contents = jwtHelper.decodeToken(this.token)
-    return new User(contents.userId, contents.role, contents.organisation_id);
-  }
 
-  getToken():string {
-    return this.token === null ? "" : this.token;
-  }
-
-  isPermitted(roles: Array<string>): boolean {
-    if (!this.getCurrentUser()) {
-      return false;
+    getCurrentUser(): User | null {
+        return this.user;
     }
-    if (!this.getCurrentUser()?._role) {
-      return false;
-    }
-    return roles.includes(<string>this.getCurrentUser()?._role);
-  }
 
-  parseToken(token: string) {
-    const jwtHelper = new JwtHelperService();
-    return jwtHelper.decodeToken(token)
-  }
+    getToken(): string {
+        return this.token === null ? "" : this.token;
+    }
+
+    isLoggedIn(): boolean {
+        if (!this.getCurrentUser()) {
+            this.router.navigate(['/']);
+            return false;
+        }
+        if (this.jwtHelper.isTokenExpired(this.token)) {
+            this.router.navigate(['/']);
+            return false;
+        }
+        return true;
+    }
+
+    isPermitted(roles: Array<string>): void {
+        if (!this.getCurrentUser()) {
+            this.router.navigate(['/']);
+        }
+        if (!this.getCurrentUser()?._role) {
+            this.router.navigate(['/']);
+        }
+        if (!roles.includes(<string>this.user?._role)) {
+            this.router.navigate(['/dashboard']);
+        }
+    }
+
+    parseToken(token: string) {
+        const jwtHelper = new JwtHelperService();
+        return jwtHelper.decodeToken(token)
+    }
 }

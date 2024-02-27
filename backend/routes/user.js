@@ -16,9 +16,9 @@ router.post('/create', verify(['sysadmin']), async (req, res) => {
   });
   try {
     await user.save();
-    res.status(201).json({ message: 'User registered successfully' + user });
+    return res.status(201).json({ message: 'User registered successfully' + user });
   } catch (error) {
-    res.status(500).json({ error: error });
+    return res.status(500).json({ error: error });
   }
 });
 
@@ -44,19 +44,18 @@ router.post('/login', async (req, res) => {
         expiresIn: '1 hour'
       }
     );
-    res.json({ token });
-    res.status(200).json({ token });
+    return res.status(200).json({ token });
   } catch (error) {
-    res.status(500).json({ error: 'Login failed' });
+    return res.status(500).json({ error: 'Login failed' });
   }
 });
 
 router.get('/', verify(['sysadmin']), async (req, res) => {
   try {
     const users = await User.find({});
-    res.status(200).json(users);
+    return res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ error: 'Unable to find users' });
+    return res.status(500).json({ error: 'Unable to find users' });
   }
 });
 

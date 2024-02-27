@@ -23,9 +23,9 @@ router.post('/create', verify(['sysadmin', 'cto', 'techlead']), async (req, res)
             version_increment: 1
         })
         await changelog.save();
-        res.status(201).json(technology);
+        return res.status(201).json(technology);
     } catch (error) {
-        res.status(500).json({ error: "Could not create technology" });
+        return res.status(500).json({ error: "Could not create technology" });
     }
 })
 
@@ -34,9 +34,9 @@ router.get('/', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
         const technology = await Technology.find({
             deleted_at: null
         });
-        res.status(200).json(technology);
+        return res.status(200).json(technology);
     } catch (error) {
-        res.status(500).json({ error: 'Unable to find organisations' });
+        return res.status(500).json({ error: 'Unable to find organisations' });
     }
 });
 
@@ -46,21 +46,21 @@ router.get('/:id', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => 
             technology_id: req.params.id,
             deleted_at: null
         });
-        res.status(200).json(technology);
+        return res.status(200).json(technology);
     } catch (error) {
-        res.status(500).json({ error: 'Unable to find technologies' });
+        return res.status(500).json({ error: 'Unable to find technologies' });
     }
 });
 
-router.get('/getByOrg', verify(['sysadmin', 'cto', 'techlead', 'user']), async (req, res) => {
+router.get('/getByOrg/:organisation_id', verify(['sysadmin', 'cto', 'techlead', 'user']), async (req, res) => {
     try {
         const technologies = await Technology.find({
-            organisation_id: req.body.organisation_id,
+            organisation_id: req.params.organisation_id,
             deleted_at: null
         });
-        res.status(200).json(technologies);
+        return res.status(200).json(technologies);
     } catch (error) {
-        res.status(500).json({ error: 'Unable to find technologies' });
+        return res.status(500).json({ error: 'Unable to find technologies' });
     }
 });
 

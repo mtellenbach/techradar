@@ -1,1 +1,12 @@
-<p>dashboard works!</p>
+<table>
+    <thead>
+    <th>Name</th>
+    <th>Description</th>
+    </thead>
+    <tbody>
+    <tr *ngFor="let technology of technologies">
+        <td>{{technology.name}}</td>
+        <td>{{technology.description}}</td>
+    </tr>
+    </tbody>
+</table>
