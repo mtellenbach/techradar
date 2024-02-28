@@ -1,6 +1,6 @@
 <div id="app">
     <div class="container mx-auto p-4">
-        <nav *ngIf="user?.user_id" class="flex">
+        <nav *ngIf="isLoggedIn" class="flex">
             <div class="mr-3">
                 <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" routerLink="/dashboard">Dashboard</a>
             </div>
@@ -15,7 +15,7 @@
                 <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" *ngIf="user?.role !=='user'" routerLink="/users">Users</a>
             </div>
 
-            <div *ngIf="user?.user_id">
+            <div *ngIf="isLoggedIn">
                 <button class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" (click)="onLogout()">Logout</button>
             </div>
         </nav>

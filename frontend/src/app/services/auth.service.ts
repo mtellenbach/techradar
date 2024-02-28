@@ -41,6 +41,9 @@ export class AuthService {
     }
 
     getCurrentUser(): User | null {
+        if (this.user !== null) {
+          this.is_loggedIn.next(true);
+        }
         return this.user;
     }
 
