@@ -5,6 +5,7 @@ import {AuthService} from "../../services/auth.service";
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Organisation} from "../../models/organisation.type";
+import {environment} from "../../../environments/environments";
 
 @Component({
   selector: 'app-organisation-edit',
@@ -12,6 +13,7 @@ import {Organisation} from "../../models/organisation.type";
   styleUrl: './organisation-edit.component.css'
 })
 export class OrganisationEditComponent {
+    apiUrl = environment.apiUrl
     organisation: Organisation | null = null;
     id: string = "";
     name: string = "";
@@ -24,7 +26,7 @@ export class OrganisationEditComponent {
     }
 
     getOrganisation() {
-        const endpoint = `http://localhost:3000/organisations/${this.activatedRoute.snapshot.params['id']}`;
+        const endpoint = `${this.apiUrl}/organisations/${this.activatedRoute.snapshot.params['id']}`;
 
         let res = this.http.get<Organisation>(endpoint, {headers: this.auth.getHeaders()});
 
@@ -37,7 +39,7 @@ export class OrganisationEditComponent {
     }
 
     onSubmit() {
-        const endpoint = `http://localhost:3000/organisations`;
+        const endpoint = `${this.apiUrl}/organisations`;
         const body = {
             id: this.id,
             name: this.name

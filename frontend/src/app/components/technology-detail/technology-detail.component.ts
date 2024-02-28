@@ -4,6 +4,7 @@ import {AuthService} from "../../services/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {User} from "../../models/user.type";
+import {environment} from "../../../environments/environments";
 
 @Component({
     selector: 'app-technology-detail',
@@ -11,6 +12,7 @@ import {User} from "../../models/user.type";
     styleUrl: './technology-detail.component.css'
 })
 export class TechnologyDetailComponent {
+    apiUrl = environment.apiUrl
     technology: Technology | null = null;
     user: User | null;
     type: string | null = null;
@@ -21,7 +23,7 @@ export class TechnologyDetailComponent {
     }
 
     ngOnInit() {
-        const endpoint = `http://localhost:3000/technologies/${this.activatedRoute.snapshot.params['id']}`;
+        const endpoint = `${this.apiUrl}/technologies/${this.activatedRoute.snapshot.params['id']}`;
         this.http.get<Technology>(endpoint, {headers: this.auth.getHeaders()})
             .subscribe((technology: Technology) => {
                     this.technology = {

@@ -7,6 +7,7 @@ import {Technology} from "../../models/technology.type";
 import {catchError, finalize, map, Observable, toArray} from "rxjs";
 import {ThreeMFLoader} from "three/examples/jsm/loaders/3MFLoader";
 import {Converted, reConvertTypeMaturity, typeMaturityConverter} from "../../helpers/type-maturity.helper";
+import {environment} from "../../../environments/environments";
 
 @Component({
     selector: 'app-dashboard',
@@ -15,7 +16,7 @@ import {Converted, reConvertTypeMaturity, typeMaturityConverter} from "../../hel
 })
 export class DashboardComponent {
     technologies: Technology[] | null = null;
-    baseurl: string = 'http://localhost:3000/technologies/';
+    apiUrl = environment.apiUrl;
     user: User | null = null;
 
     constructor(private http: HttpClient, private auth: AuthService, private router: Router) {

@@ -5,11 +5,13 @@ import {Router} from "@angular/router";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Organisation} from "../models/organisation.type";
 import {BehaviorSubject} from "rxjs";
+import {environment} from "../../environments/environments";
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
+    apiUrl = environment.apiUrl;
     jwtHelper: JwtHelperService = new JwtHelperService();
     token: string | null = localStorage.getItem('token');
     user: User | null = null;
@@ -92,7 +94,7 @@ export class AuthService {
     }
 
     login(body: object) {
-        const res = this.http.post<any>('http://localhost:3000/users/login', body)
+        const res = this.http.post<any>(`${this.apiUrl}/users/login`, body)
         res.pipe().subscribe(
             response => {
                 const token = response.token;

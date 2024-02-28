@@ -4,6 +4,7 @@ import {AuthService} from "../../services/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Organisation} from "../../models/organisation.type";
+import {environment} from "../../../environments/environments";
 
 @Component({
   selector: 'app-user-create',
@@ -11,6 +12,7 @@ import {Organisation} from "../../models/organisation.type";
   styleUrl: './user-create.component.css'
 })
 export class UserCreateComponent {
+    apiUrl = environment.apiUrl;
     currentUser: User | null = null;
     username: string = "";
     password: string = "";
@@ -39,7 +41,7 @@ export class UserCreateComponent {
     }
 
     onSubmit() {
-        const endpoint = `http://localhost:3000/users/create`
+        const endpoint = `${this.apiUrl}/users/create`
         const body = {
             username: this.username,
             password: this.password,
@@ -57,7 +59,7 @@ export class UserCreateComponent {
     }
 
     getOrganisations() {
-        const res = this.http.get<Organisation[]>('http://localhost:3000/organisations', {headers: this.auth.getHeaders()});
+        const res = this.http.get<Organisation[]>(`${this.apiUrl}/organisations`, {headers: this.auth.getHeaders()});
         res.pipe().subscribe((organisations: Organisation[]) => {
             this.organisations = organisations;
         }, error => {

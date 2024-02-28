@@ -5,6 +5,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Organisation} from "../../models/organisation.type";
 import {User} from "../../models/user.type";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {environment} from "../../../environments/environments";
 
 @Component({
     selector: 'app-technology-create',
@@ -12,6 +13,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
     styleUrl: './technology-create.component.css'
 })
 export class TechnologyCreateComponent {
+    apiUrl = environment.apiUrl;
     user: User | null = this.auth.getCurrentUser();
     organisation_id: string | undefined = "";
     organisations: Organisation[] = [];
@@ -43,7 +45,7 @@ export class TechnologyCreateComponent {
     }
 
     getOrganisations() {
-        let endpoint = "http://localhost:3000/organisations/";
+        let endpoint = `${this.apiUrl}/organisations/`;
 
         let headers = new HttpHeaders({
             'Content-Type': 'application/json',
@@ -77,7 +79,7 @@ export class TechnologyCreateComponent {
           is_published: this.technologyForm.get('is_published')?.value || false
         }
 
-        const res = this.http.post<any>('http://localhost:3000/technologies/create', body, {headers: this.auth.getHeaders()});
+        const res = this.http.post<any>(`${this.apiUrl}/technologies/create`, body, {headers: this.auth.getHeaders()});
         res.pipe().subscribe(
           response => {
             const id = response._id;

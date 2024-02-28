@@ -4,6 +4,7 @@ import {Organisation} from "../../models/organisation.type";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
+import {environment} from "../../../environments/environments";
 
 @Component({
   selector: 'app-organisation-create',
@@ -12,6 +13,7 @@ import {HttpClient} from "@angular/common/http";
 })
 export class OrganisationCreateComponent {
 
+    apiUrl = environment.apiUrl;
     user: User | null = this.auth.getCurrentUser();
     name: string = "";
 
@@ -31,7 +33,7 @@ export class OrganisationCreateComponent {
         const body = {
             name: this.name
         }
-        this.http.post<any>('http://localhost:3000/organisations/create', body, {headers: this.auth.getHeaders()})
+        this.http.post<any>(`${this.apiUrl}/organisations/create`, body, {headers: this.auth.getHeaders()})
             .subscribe(
                 response => {
                     const id = response._id;

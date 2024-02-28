@@ -6,6 +6,7 @@ import {Technology} from "../../models/technology.type";
 import {User} from "../../models/user.type";
 import {Organisation} from "../../models/organisation.type";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {environment} from "../../../environments/environments";
 
 @Component({
     selector: 'app-technology-edit',
@@ -13,6 +14,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
     styleUrl: './technology-edit.component.css'
 })
 export class TechnologyEditComponent {
+    apiUrl = environment.apiUrl
     technology: Technology | null = null;
     user: User | null = this.auth.getCurrentUser();
     organisation_id: string | undefined = "";
@@ -53,7 +55,7 @@ export class TechnologyEditComponent {
     }
 
     getTechnology() {
-        const endpoint = `http://localhost:3000/technologies/${this.activatedRoute.snapshot.params['id']}`;
+        const endpoint = `${this.apiUrl}/technologies/${this.activatedRoute.snapshot.params['id']}`;
 
         let res = this.http.get<Technology>(endpoint, {headers: this.auth.getHeaders()});
 
@@ -78,7 +80,7 @@ export class TechnologyEditComponent {
     }
 
     onSubmit() {
-        const endpoint = `http://localhost:3000/technologies`;
+        const endpoint = `${this.apiUrl}/technologies`;
         const body = {
           id: this.activatedRoute.snapshot.params['id'],
           user_id: this.technologyForm.get('user_id')?.value,

@@ -23,7 +23,9 @@ Password: admin
 3. Change the values inside the freshly created `.env`-File
 
 ```
-SECRET_KEY=CHANGEMEASAP
+SECRET_KEY=<secret_key>
+
+SALT_ROUNDS=<number_of_salt_rounds>
 
 MONGODB_URI=mongodb://<your_mongo_db_uri>
 ```
@@ -37,6 +39,13 @@ MONGODB_URI=mongodb://<your_mongo_db_uri>
 ### Frontend
 1. Open the terminal and change the directory to `frontend`
 2. Run `npm i` to install all required Node.js-Packages
+3. Create `environment.ts` inside `frontend/src/environments/` with following contents:
+```
+export const environment = {
+    // Store backend URL here like this:
+    apiUrl: 'http://localhost:3000'
+};
+```
 3. Run `ng serve` to start the application at http://localhost:4200
 4. Open http://localhost:4200 inside your browser
 

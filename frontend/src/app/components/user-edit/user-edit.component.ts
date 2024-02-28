@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../models/user.type";
 import {HttpClient} from "@angular/common/http";
 import {Organisation} from "../../models/organisation.type";
+import {environment} from "../../../environments/environments";
 
 @Component({
     selector: 'app-user-edit',
@@ -11,6 +12,7 @@ import {Organisation} from "../../models/organisation.type";
     styleUrl: './user-edit.component.css'
 })
 export class UserEditComponent {
+    apiUrl = environment.apiUrl;
     currentUser: User | null = null;
     username: string | null = "";
     password: string = "";
@@ -38,7 +40,7 @@ export class UserEditComponent {
     ngOnInit() {
         this.auth.isPermitted(['sysadmin', 'cto', 'techlead']);
 
-        const endpoint = `http://localhost:3000/users/${this.activatedRoute.snapshot.params['id']}`;
+        const endpoint = `${this.apiUrl}/users/${this.activatedRoute.snapshot.params['id']}`;
         const res = this.http.get<User>(endpoint, {headers: this.auth.getHeaders()});
         res.pipe().subscribe((user: User) => {
                 this.user_id = user.user_id;
@@ -52,7 +54,7 @@ export class UserEditComponent {
     }
 
     onSubmit() {
-        const endpoint = `http://localhost:3000/users`
+        const endpoint = `${this.apiUrl}/users`
         const body = {
             username: this.username,
             password: this.password,
@@ -71,7 +73,7 @@ export class UserEditComponent {
     }
 
     getOrganisations() {
-        const res = this.http.get<Organisation[]>('http://localhost:3000/organisations', {headers: this.auth.getHeaders()});
+        const res = this.http.get<Organisation[]>(`${this.apiUrl}/organisations`, {headers: this.auth.getHeaders()});
         res.pipe().subscribe((organisations: Organisation[]) => {
             this.organisations = organisations;
         }, error => {

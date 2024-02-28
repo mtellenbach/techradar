@@ -1,4 +1,6 @@
 .idea
 backend/.env
+frontend/.env
 /**/*.env
 /**/*/node_modules
+/frontend/src/environments/*.ts
