@@ -4,6 +4,8 @@ import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Technology} from "../../models/technology.type";
 import {User} from "../../models/user.type";
+import {Organisation} from "../../models/organisation.type";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
     selector: 'app-technology-edit',
@@ -12,17 +14,39 @@ import {User} from "../../models/user.type";
 })
 export class TechnologyEditComponent {
     technology: Technology | null = null;
-    name: string = "";
-    description: string = "";
-    maturity: string = "";
-    type: string = "";
-    is_published: string = "";
     user: User | null = this.auth.getCurrentUser();
-    id: string = "";
-    organisation_id: string = "";
+    organisation_id: string | undefined = "";
 
-    constructor(private auth: AuthService, private http: HttpClient, private activatedRoute: ActivatedRoute, private router: Router) {
+  technologyForm: FormGroup;
+
+  constructor(private auth: AuthService, private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute) {
+    this.getTechnology()
+    if (this.technology) {
+      this.technologyForm = this.formBuilder.group({
+        organisation_id: [this.technology.organisation_id, Validators.required],
+        user_id: [this.technology.user_id, Validators.required],
+        name: [this.technology.name, Validators.required],
+        maturity: [this.technology.maturity, Validators.required],
+        type: [this.technology.type, Validators.required],
+        description: [this.technology.description, Validators.required],
+        decision: [this.technology.decision],
+        is_published: [this.technology.is_published],
+        created_at: [this.technology.created_at]
+      });
+    } else {
+      this.technologyForm = this.formBuilder.group({
+        organisation_id: ['', Validators.required],
+        user_id: [this.auth.getCurrentUser()?._id, Validators.required],
+        name: ['', Validators.required],
+        maturity: ['', Validators.required],
+        type: ['', Validators.required],
+        description: ['', Validators.required],
+        decision: [''],
+        is_published: [''],
+        created_at: [Date.now()]
+      });
     }
+  }
 
     ngOnInit() {
         this.getTechnology()
@@ -35,13 +59,19 @@ export class TechnologyEditComponent {
 
         res.pipe().subscribe((technology: Technology) => {
             this.technology = technology;
-            this.name = technology.name;
-            this.description = technology.description;
-            this.maturity = technology.maturity;
-            this.type = technology.type;
-            this.is_published = technology.is_published;
-            this.id = technology._id;
-            this.organisation_id = technology.organisation_id;
+            this.technologyForm = this.formBuilder.group({
+              organisation_id: [this.technology.organisation_id, Validators.required],
+              user_id: [this.technology.user_id, Validators.required],
+              name: [this.technology.name, Validators.required],
+              maturity: [this.technology.maturity, Validators.required],
+              type: [this.technology.type, Validators.required],
+              description: [this.technology.description, Validators.required],
+              decision: [this.technology.decision],
+              is_published: [this.technology.is_published],
+              created_at: [this.technology.created_at]
+            });
+            console.log(this.technology)
+
         }, error => {
             console.error(error)
         })
@@ -49,25 +79,36 @@ export class TechnologyEditComponent {
 
     onSubmit() {
         const endpoint = `http://localhost:3000/technologies`;
-
         const body = {
-            name: this.name,
-            description: this.description,
-            maturity: this.maturity,
-            type: this.type,
-            is_published: this.is_published,
-            user_id: this.user?._id,
-            _id: this.id,
-            organisation_id: this.organisation_id
-        };
+          id: this.activatedRoute.snapshot.params['id'],
+          user_id: this.technologyForm.get('user_id')?.value,
+          organisation_id: this.technologyForm.get('organisation_id')?.value,
+          name: this.technologyForm.get('name')?.value,
+          maturity: this.technologyForm.get('maturity')?.value,
+          type: this.technologyForm.get('type')?.value,
+          description: this.technologyForm.get('description')?.value,
+          decision: this.technologyForm.get('decision')?.value,
+          is_published: this.technologyForm.get('is_published')?.value
+        }
 
-        const res = this.http.put<Technology>(endpoint, body, {headers: this.auth.getHeaders()}).subscribe({
-            next: technology => {
+        const res = this.http.put<Technology>(endpoint, body, {headers: this.auth.getHeaders()}).pipe().subscribe((technology: Technology) => {
+                console.log(technology)
                 this.router.navigate([`/technology/detail/${technology._id}`])
-            },
-            error: error => {
-                console.error(`Error trying to update ${this.technology?.name}`, error);
-            }
-        });
+            }, error => {
+              console.error(error)
+            });
     }
+
+  isFieldValid(field: string) {
+    const formControl = this.technologyForm.get(field);
+    return formControl?.touched && formControl.invalid;
+  }
+
+  getErrorMessage(field: string) {
+    const formControl = this.technologyForm.get(field);
+    if (formControl?.hasError('required')) {
+      return 'Dieses Feld ist erforderlich';
+    }
+    return;
+  }
 }

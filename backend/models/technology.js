@@ -10,6 +10,7 @@ const TechnologySchema = new Schema({
     maturity: { type: Number, required: true },
     type: { type: Number, required: true },
     description: { type: String, required: true },
+    decision: { type: String },
     is_published: { type: Boolean },
     created_at: { type: Date, required: true, default: Date.now() },
     updated_at: { type: Date },

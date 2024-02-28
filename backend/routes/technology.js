@@ -17,6 +17,7 @@ router.post('/create', verify(['sysadmin', 'cto', 'techlead']), async (req, res)
             maturity: req.body.maturity,
             type: req.body.type,
             description: req.body.description,
+            decision: req.body.decision,
             is_published: req.body.is_published
         });
         await technology.save();
@@ -81,22 +82,21 @@ router.get('/getByOrg/:organisation_id', verify(['sysadmin', 'cto', 'techlead', 
 router.put('/', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
     try {
         const technology = await Technology.findOneAndUpdate(
-            {
-                _id: req.body._id,
-                deleted_at: null
-            },
-            {
-                user_id: req.body.user_id,
-                organisation_id: req.body.organisation_id,
-                name: req.body.name,
-                maturity: req.body.maturity,
-                type: req.body.type,
-                description: req.body.description,
-                is_published: req.body.is_published,
-                updated_at: Date.now()
-            });
-        const changelog = createChangeLog(technology);
-        technology.changelogs.push(changelog._id);
+        {
+            _id: req.body.id
+        },
+        {
+            user_id: req.body.user_id,
+            organisation_id: req.body.organisation_id,
+            name: req.body.name,
+            maturity: req.body.maturity,
+            type: req.body.type,
+            description: req.body.description,
+            decision: req.body.decision,
+            is_published: req.body.is_published,
+            updated_at: Date.now()
+        });
+        createChangeLog(technology);
         return res.status(200).json(technology);
     } catch (error) {
         console.log(error);
@@ -123,22 +123,20 @@ router.put('/publish', verify(['sysadmin', 'cto', 'techlead']), async (req, res)
     }
 });
 
-router.put('/delete', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
+router.delete('/:id', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
     try {
-        const { technology_id } = req.body;
-        const technology = await Technology.findOneAndUpdate(
-            { technology_id: technology_id },
-            {
-                deleted_at: Date.now()
-            }
+        const technology = await Technology.findOneAndDelete(
+            { _id: req.params.id }
             );
-        return res.status(200).json(`Deleted technology ${technology.name}`);
+        return res.status(200).json(technology);
     } catch (error) {
+        console.log(error)
         return res.status(500).json({ error: "Unable to delete technology" });
     }
 })
 
 async function createChangeLog(technology) {
+    console.log(technology.id)
     const latestTechnologyChangeLog = await ChangeLog.findOne({ technology_id: technology.id })
         .sort([['created_at', -1]]).limit(1).exec();
     let version_increment = 0;

@@ -9,6 +9,7 @@ export interface Technology {
   maturity: string;
   type: string;
   description: string;
+  decision: string;
   is_published: string;
   created_at: string;
   updated_at: string|null;

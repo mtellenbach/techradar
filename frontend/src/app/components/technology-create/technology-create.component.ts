@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Organisation} from "../../models/organisation.type";
 import {User} from "../../models/user.type";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
     selector: 'app-technology-create',
@@ -12,17 +13,22 @@ import {User} from "../../models/user.type";
 })
 export class TechnologyCreateComponent {
     user: User | null = this.auth.getCurrentUser();
-    organisations: Organisation[] = [];
     organisation_id: string | undefined = "";
-    user_id: string = "";
-    name: string = "";
-    maturity: string = "";
-    type: string = "";
-    description: string = "";
-    is_published: string = "";
-    created_at: string = "";
+    organisations: Organisation[] = [];
 
-    constructor(private auth: AuthService, private router: Router, private http: HttpClient) {
+    technologyForm: FormGroup;
+
+    constructor(private auth: AuthService, private router: Router, private http: HttpClient, private formBuilder: FormBuilder) {
+      this.technologyForm = this.formBuilder.group({
+        user_id: [this.auth.getCurrentUser()?._id, Validators.required],
+        name: ['', Validators.required],
+        maturity: ['', Validators.required],
+        type: ['', Validators.required],
+        description: ['', Validators.required],
+        decision: [''],
+        is_published: [''],
+        created_at: [Date.now()]
+      });
     }
 
     ngOnInit() {
@@ -59,25 +65,43 @@ export class TechnologyCreateComponent {
             this.router.navigate(['/'])
         }
 
+      if (this.technologyForm.valid) {
         const body = {
-            user_id: this.auth.getCurrentUser()?._id,
-            organisation_id: this.auth.getCurrentUser()?.organisation_id,
-            name: this.name,
-            maturity: this.maturity,
-            type: this.type,
-            description: this.description,
-            is_published: this.is_published
+          user_id: this.auth.getCurrentUser()?._id,
+          organisation_id: this.auth.getCurrentUser()?.organisation_id,
+          name: this.technologyForm.get('name')?.value,
+          maturity: this.technologyForm.get('maturity')?.value,
+          type: this.technologyForm.get('type')?.value,
+          description: this.technologyForm.get('description')?.value,
+          decision: this.technologyForm.get('decision')?.value,
+          is_published: this.technologyForm.get('is_published')?.value
         }
 
         const res = this.http.post<any>('http://localhost:3000/technologies/create', body, {headers: this.auth.getHeaders()});
         res.pipe().subscribe(
-            response => {
-                const id = response._id;
-                this.router.navigate([`/technology/detail/${id}`]);
-            },
-            error => {
-                console.error('Failed to create technology:', error);
-            }
+          response => {
+            const id = response._id;
+            this.router.navigate([`/technology/detail/${id}`]);
+          },
+          error => {
+            console.error('Failed to create technology:', error);
+          }
         );
+      } else {
+        this.technologyForm.markAllAsTouched();
+      }
     }
+
+  isFieldValid(field: string) {
+    const formControl = this.technologyForm.get(field);
+    return formControl?.touched && formControl.invalid;
+  }
+
+  getErrorMessage(field: string) {
+    const formControl = this.technologyForm.get(field);
+    if (formControl?.hasError('required')) {
+      return 'Dieses Feld ist erforderlich';
+    }
+    return;
+  }
 }

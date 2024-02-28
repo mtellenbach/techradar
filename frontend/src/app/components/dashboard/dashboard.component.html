@@ -20,16 +20,21 @@
 <table class="table-auto w-full">
     <thead>
     <th class="text-left">Name</th>
-    <th class="text-left">Description</th>
-    <th></th>
-    <th></th>
+    <th class="pl-3 text-left">Description</th>
+    <th class="pl-3 text-left">Type</th>
+    <th class="pl-3 text-left">Maturity</th>
+    <th class="pl-3"></th>
+    <th class="pl-3"></th>
     </thead>
     <tbody>
     <tr *ngFor="let technology of technologies">
-        <td>{{technology.name}}</td>
-        <td>{{technology.description}}</td>
-        <td><a routerLink="/technology/detail/{{technology._id}}">Detail</a></td>
-        <td><a routerLink="/technology/edit/{{technology._id}}">Edit</a></td>
+        <td class="py-3">{{technology.name}}</td>
+        <td class="pl-3">{{technology.description}}</td>
+        <td class="pl-3">{{technology.maturity}}</td>
+        <td class="pl-3">{{technology.type}}</td>
+        <td class="pl-3"><a routerLink="/technology/detail/{{technology._id}}"  class="inline-block border border-blue-500 rounded py-1 px-2 bg-blue-500 text-white cursor-pointer">Detail</a></td>
+        <td class="pl-3"><a routerLink="/technology/edit/{{technology._id}}" class="inline-block border border-blue-500 rounded py-1 px-2 bg-blue-500 text-white cursor-pointer">Edit</a></td>
+        <td class="pl-3"><a (click)="onDelete(technology._id)" class="inline-block border border-red-500 rounded py-1 px-2 bg-red-500 text-white cursor-pointer">Delete</a></td>
     </tr>
     </tbody>
 </table>

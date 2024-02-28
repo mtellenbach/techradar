@@ -4,7 +4,7 @@ import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/user.type";
 import {Technology} from "../../models/technology.type";
-import {catchError, map, Observable, toArray} from "rxjs";
+import {catchError, finalize, map, Observable, toArray} from "rxjs";
 import {ThreeMFLoader} from "three/examples/jsm/loaders/3MFLoader";
 
 @Component({
@@ -14,6 +14,7 @@ import {ThreeMFLoader} from "three/examples/jsm/loaders/3MFLoader";
 })
 export class DashboardComponent {
     technologies: Technology[] | null = null;
+    baseurl: string = 'http://localhost:3000/technologies/'
 
     constructor(private http: HttpClient, private auth: AuthService, private router: Router, private ngZone: NgZone) {
     }
@@ -22,32 +23,46 @@ export class DashboardComponent {
         if (!this.auth.getCurrentUser() && this.auth.isLoggedIn()) {
             this.router.navigate(['/']);
         }
+        this.fetchTechnologies()
+    }
+    fetchTechnologies() {
+
+      // @ts-ignore
+      let endpoint: string | null = `${this.baseurl}/getByOrg/${this.auth.getCurrentUser()?.organisation_id?._id}`;
+
+      // @ts-ignore
+      if (this.auth.getCurrentUser()?.role  === "sysadmin") {
+        endpoint = this.baseurl;
+      }
+
+      if (this.auth.getCurrentUser()?.role === 'user') {
         // @ts-ignore
-        let endpoint: string | null = `http://localhost:3000/technologies/getByOrg/${this.auth.getCurrentUser()?.organisation_id?._id}`;
+        endpoint = `${this.baseurl}getByOrg/${this.auth.getCurrentUser()?.organisation_id?._id}/isPublished`
+      }
 
-        // @ts-ignore
-        if (this.auth.getCurrentUser()?.role  === "sysadmin") {
-            endpoint = "http://localhost:3000/technologies/";
-        }
+      let res = this.http.get<Technology[]>(endpoint, {headers: this.auth.getHeaders()});
 
-        if (this.auth.getCurrentUser()?.role === 'user') {
-            // @ts-ignore
-            endpoint = `http://localhost:3000/technologies/getByOrg/${this.auth.getCurrentUser()?.organisation_id?._id}/isPublished`
-        }
+      res.pipe().subscribe((technologies: Technology[]) => {
+        this.technologies = technologies;
+        this.createScene();
+      })
+    }
 
-        let res = this.http.get<Technology[]>(endpoint, {headers: this.auth.getHeaders()});
+    onDelete(id: string) {
+      if(confirm("Are you sure?")) {
+        const endpoint = `${this.baseurl}${id}`;
+        let res = this.http.delete<Technology>(endpoint, {headers: this.auth.getHeaders()});
 
-        res.pipe().subscribe((technologies: Technology[]) => {
-            this.technologies = technologies;
-            this.createScene();
+        res.pipe().subscribe((response: any) => {
+          this.fetchTechnologies()
         })
+      }
     }
 
   createScene() {
     const radar = document.getElementById('technology-radar') as HTMLCanvasElement;
     const ctx = radar.getContext('2d');
     radar.width = radar.width / 2;
-    console.log(radar.width, radar.height);
 
     const centerX = radar.width / 2;
     const centerY = radar.height / 2;
@@ -144,11 +159,9 @@ export class DashboardComponent {
       };
     };
 
-    console.log(this.technologies)
     if (this.technologies) {
       this.technologies?.forEach((tech) => {
         const { type, maturity } = tech;
-        console.log(type, maturity);
         const { x, y } = calculatePosition(type, maturity);
         drawTechnology(x, y);
       })

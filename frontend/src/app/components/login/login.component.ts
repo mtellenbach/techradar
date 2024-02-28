@@ -36,16 +36,16 @@ export class LoginComponent {
         }
     }
 
-    isFieldValid(field: string) {
-        const formControl = this.loginForm.get(field);
-        return formControl?.touched && formControl.invalid;
-    }
+  isFieldValid(field: string) {
+    const formControl = this.loginForm.get(field);
+    return formControl?.touched && formControl.invalid;
+  }
 
-    getErrorMessage(field: string) {
-        const formControl = this.loginForm.get(field);
-        if (formControl?.hasError('required')) {
-            return 'Dieses Feld ist erforderlich';
-        }
-        return;
+  getErrorMessage(field: string) {
+    const formControl = this.loginForm.get(field);
+    if (formControl?.hasError('required')) {
+      return 'Dieses Feld ist erforderlich';
     }
+    return;
+  }
 }

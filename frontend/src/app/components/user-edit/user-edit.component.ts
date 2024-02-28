@@ -79,6 +79,4 @@ export class UserEditComponent {
             console.error(error);
         })
     }
-
-    protected readonly JSON = JSON;
 }

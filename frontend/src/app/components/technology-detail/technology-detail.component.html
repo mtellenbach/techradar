@@ -1,13 +1,26 @@
 <h2>{{technology?.name}}</h2>
-<dl>
-    <dt>Description</dt>
-    <dd>{{technology?.description}}</dd>
-    <dt>Maturity</dt>
-    <dd>{{technology?.maturity}}</dd>
-    <dt>Type</dt>
-    <dd>{{technology?.type}}</dd>
-    <dt>Created</dt>
-    <dd>{{technology?.created_at}}</dd>
+<div class="mt-6 border-t border-gray-100">
+  <dl class="divide-y divide-gray-100">
+    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+      <dt class="text-sm font-medium leading-6 text-gray-900">Description</dt>
+      <dd>{{technology?.description}}</dd>
+    </div>
+    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+      <dt class="text-sm font-medium leading-6 text-gray-900">Decision</dt>
+      <dd>{{technology?.decision}}</dd>
+    </div>
+    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+      <dt class="text-sm font-medium leading-6 text-gray-900">Maturity</dt>
+      <dd>{{maturity}}</dd>
+    </div>
+    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+      <dt class="text-sm font-medium leading-6 text-gray-900">Type</dt>
+      <dd>{{type}}</dd>
+    </div>
+    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+      <dt class="text-sm font-medium leading-6 text-gray-900">Created</dt>
+      <dd>{{technology?.created_at}}</dd>
+    </div>
 </dl>
 
 <div *ngIf="user?.role !== 'user' && technology?.changelogs">
