@@ -2,8 +2,7 @@ import {Component, Input} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {User} from "../../models/user.type";
-import {Technology} from "../../models/technology.type";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Organisation} from "../../models/organisation.type";
 
 @Component({
