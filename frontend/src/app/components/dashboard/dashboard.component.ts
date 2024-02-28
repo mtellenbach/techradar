@@ -14,9 +14,11 @@ import {ThreeMFLoader} from "three/examples/jsm/loaders/3MFLoader";
 })
 export class DashboardComponent {
     technologies: Technology[] | null = null;
-    baseurl: string = 'http://localhost:3000/technologies/'
+    baseurl: string = 'http://localhost:3000/technologies/';
+    user: User | null = null;
 
-    constructor(private http: HttpClient, private auth: AuthService, private router: Router, private ngZone: NgZone) {
+    constructor(private http: HttpClient, private auth: AuthService, private router: Router) {
+      this.user = this.auth.getCurrentUser();
     }
 
     ngOnInit() {

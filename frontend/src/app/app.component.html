@@ -1,18 +1,18 @@
 <div id="app">
     <div class="container mx-auto p-4">
-        <nav *ngIf="isLoggedIn" class="flex">
+        <nav *ngIf="isLoggedIn" class="flex justify-between">
             <div class="mr-3">
                 <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" routerLink="/dashboard">Dashboard</a>
             </div>
-            <div class="mr-3">
-                <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" *ngIf="user?.role ==='sysadmin' || user?.role ==='cto' || user?.role ==='techlead'"
+            <div class="mr-3" *ngIf="user?.role ==='sysadmin' || user?.role ==='cto' || user?.role ==='techlead'">
+                <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white"
                    routerLink="/technology/create">Create Technology</a>
             </div>
-            <div class="mr-3">
-                <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" *ngIf="user?.role ==='sysadmin'" routerLink="/organisation">Organisations</a>
+            <div class="mr-3" *ngIf="user?.role === 'sysadmin'">
+                <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" routerLink="/organisation">Organisations</a>
             </div>
-            <div class="mr-3">
-                <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" *ngIf="user?.role !=='user'" routerLink="/users">Users</a>
+            <div class="mr-3" *ngIf="user?.role !== 'user'">
+                <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" routerLink="/users">Users</a>
             </div>
 
             <div *ngIf="isLoggedIn">

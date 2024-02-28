@@ -13,6 +13,7 @@ export class AuthService {
     jwtHelper: JwtHelperService = new JwtHelperService();
     token: string | null = localStorage.getItem('token');
     user: User | null = null;
+    authError: string | null = null;
     private is_loggedIn = new BehaviorSubject<boolean>(false);
 
     constructor(private router: Router, private http: HttpClient) {
@@ -103,6 +104,7 @@ export class AuthService {
             },
             error => {
                 console.error('Login failed:', error);
+                alert('Login failed')
             }
         );
     }

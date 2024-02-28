@@ -19,22 +19,28 @@
 
 <table class="table-auto w-full">
     <thead>
-    <th class="text-left">Name</th>
+    <th ></th>
+    <th class="pl-3 text-left">Name</th>
     <th class="pl-3 text-left">Description</th>
     <th class="pl-3 text-left">Type</th>
     <th class="pl-3 text-left">Maturity</th>
     <th class="pl-3"></th>
-    <th class="pl-3"></th>
+    <th *ngIf="user?.role !== 'user'" class="pl-3"></th>
+    <th *ngIf="user?.role !== 'user'" class="pl-3"></th>
     </thead>
     <tbody>
     <tr *ngFor="let technology of technologies">
-        <td class="py-3">{{technology.name}}</td>
+      <th *ngIf="!technology.is_published">
+        <p class="inline-block text-xs border border-orange-500 rounded-full py-1 px-1 bg-orange-500 text-white cursor-pointer">unpublished</p>
+      </th>
+      <th *ngIf="technology.is_published"></th>
+        <td class="pl-3 py-3">{{technology.name}}</td>
         <td class="pl-3">{{technology.description}}</td>
         <td class="pl-3">{{technology.maturity}}</td>
         <td class="pl-3">{{technology.type}}</td>
         <td class="pl-3"><a routerLink="/technology/detail/{{technology._id}}"  class="inline-block border border-blue-500 rounded py-1 px-2 bg-blue-500 text-white cursor-pointer">Detail</a></td>
-        <td class="pl-3"><a routerLink="/technology/edit/{{technology._id}}" class="inline-block border border-blue-500 rounded py-1 px-2 bg-blue-500 text-white cursor-pointer">Edit</a></td>
-        <td class="pl-3"><a (click)="onDelete(technology._id)" class="inline-block border border-red-500 rounded py-1 px-2 bg-red-500 text-white cursor-pointer">Delete</a></td>
+        <td *ngIf="user?.role !== 'user'" class="pl-3"><a routerLink="/technology/edit/{{technology._id}}" class="inline-block border border-blue-500 rounded py-1 px-2 bg-blue-500 text-white cursor-pointer">Edit</a></td>
+        <td *ngIf="user?.role !== 'user'"  class="pl-3"><a (click)="onDelete(technology._id)" class="inline-block border border-red-500 rounded py-1 px-2 bg-red-500 text-white cursor-pointer">Delete</a></td>
     </tr>
     </tbody>
 </table>

@@ -21,6 +21,7 @@ router.post('/create', verify(['sysadmin', 'cto', 'techlead']), async (req, res)
         console.log(req.body)
         return res.status(201).json({message: 'User registered successfully' + user});
     } catch (error) {
+        console.log(error)
         return res.status(500).json({error: error});
     }
 });
@@ -30,7 +31,7 @@ router.post('/login', async (req, res) => {
     try {
         let user = await User.findOne({username}).populate(['organisation_id']).exec();
         if (!user) {
-            let user = await User.findOne({email: username}).populate(['organisation_id']).exec();
+            user = await User.findOne({email: username}).populate(['organisation_id']).exec();
 
             if (!user) {
                 return res.status(404).json({message: 'User not found'});

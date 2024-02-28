@@ -4,7 +4,7 @@ const mongoose = require('mongoose'),
 const { v4: uuidv4 } = require('uuid');
 
 const UserSchema = new Schema({
-    user_id: { type: String, index: { unique: true }, default: uuidv4() },
+    user_id: { type: String, default: uuidv4() },
     username: { type: String, index: { unique: true } },
     password: { type: String, required: true },
     email: { type: String, index: { unique: true } },

@@ -74,7 +74,7 @@ export class TechnologyCreateComponent {
           type: this.technologyForm.get('type')?.value,
           description: this.technologyForm.get('description')?.value,
           decision: this.technologyForm.get('decision')?.value,
-          is_published: this.technologyForm.get('is_published')?.value
+          is_published: this.technologyForm.get('is_published')?.value || false
         }
 
         const res = this.http.post<any>('http://localhost:3000/technologies/create', body, {headers: this.auth.getHeaders()});
