@@ -6,6 +6,7 @@ import {User} from "../../models/user.type";
 import {Technology} from "../../models/technology.type";
 import {catchError, finalize, map, Observable, toArray} from "rxjs";
 import {ThreeMFLoader} from "three/examples/jsm/loaders/3MFLoader";
+import {Converted, typeMaturityConverter} from "../../helpers/type-maturity.helper";
 
 @Component({
     selector: 'app-dashboard',
@@ -46,6 +47,11 @@ export class DashboardComponent {
 
       res.pipe().subscribe((technologies: Technology[]) => {
         this.technologies = technologies;
+        this.technologies.map((technology: Technology) => {
+          const converted: Converted = typeMaturityConverter(technology);
+          technology.type = converted.type;
+          technology.maturity = converted.maturity;
+        })
         this.createScene();
       })
     }
