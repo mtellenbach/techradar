@@ -34,12 +34,12 @@ export class DashboardComponent {
 
       // @ts-ignore
       if (this.auth.getCurrentUser()?.role  === "sysadmin") {
-        endpoint = this.baseurl;
+        endpoint = `${this.apiUrl}/technologies`;
       }
 
       if (this.auth.getCurrentUser()?.role === 'user') {
         // @ts-ignore
-        endpoint = `${this.baseurl}getByOrg/${this.auth.getCurrentUser()?.organisation_id?._id}/isPublished`
+        endpoint = `${this.apiUrl}/technologies/getByOrg/${this.auth.getCurrentUser()?.organisation_id?._id}/isPublished`
       }
 
       let res = this.http.get<Technology[]>(endpoint, {headers: this.auth.getHeaders()});
@@ -57,7 +57,7 @@ export class DashboardComponent {
 
     onDelete(id: string) {
       if(confirm("Are you sure?")) {
-        const endpoint = `${this.baseurl}${id}`;
+        const endpoint = `${this.apiUrl}/technologies/${id}`;
         let res = this.http.delete<Technology>(endpoint, {headers: this.auth.getHeaders()});
 
         res.pipe().subscribe((response: any) => {
