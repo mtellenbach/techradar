@@ -1,11 +1,9 @@
-import {Component, ElementRef, NgZone, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/user.type";
 import {Technology} from "../../models/technology.type";
-import {catchError, finalize, map, Observable, toArray} from "rxjs";
-import {ThreeMFLoader} from "three/examples/jsm/loaders/3MFLoader";
 import {Converted, reConvertTypeMaturity, typeMaturityConverter} from "../../helpers/type-maturity.helper";
 import {environment} from "../../../environments/environments";
 

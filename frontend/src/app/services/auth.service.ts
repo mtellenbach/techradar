@@ -3,7 +3,6 @@ import {JwtHelperService} from "@auth0/angular-jwt";
 import {User} from "../models/user.type";
 import {Router} from "@angular/router";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Organisation} from "../models/organisation.type";
 import {BehaviorSubject} from "rxjs";
 import {environment} from "../../environments/environments";
 
@@ -15,7 +14,6 @@ export class AuthService {
     jwtHelper: JwtHelperService = new JwtHelperService();
     token: string | null = localStorage.getItem('token');
     user: User | null = null;
-    authError: string | null = null;
     private is_loggedIn = new BehaviorSubject<boolean>(false);
 
     constructor(private router: Router, private http: HttpClient) {

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {Technology} from "../../models/technology.type";
 
 import {AuthService} from "../../services/auth.service";
 import {HttpClient} from "@angular/common/http";

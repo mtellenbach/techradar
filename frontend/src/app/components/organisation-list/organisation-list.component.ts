@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
-import {Technology} from "../../models/technology.type";
 import {Organisation} from "../../models/organisation.type";
 import {environment} from "../../../environments/environments";
 

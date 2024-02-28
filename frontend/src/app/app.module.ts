@@ -18,8 +18,6 @@ import { UserCreateComponent } from './components/user-create/user-create.compon
 import { UserEditComponent } from './components/user-edit/user-edit.component';
 import { registerLocaleData } from '@angular/common';
 import localeDECH from '@angular/common/locales/de-CH';
-import {AuthService} from "./services/auth.service";
-import {User} from "./models/user.type";
 
 registerLocaleData(localeDECH)
 @NgModule({

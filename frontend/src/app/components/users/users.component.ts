@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import {User} from "../../models/user.type";
 import {AuthService} from "../../services/auth.service";
 import {HttpClient} from "@angular/common/http";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Technology} from "../../models/technology.type";
+import {Router} from "@angular/router";
 import {environment} from "../../../environments/environments";
 
 @Component({
