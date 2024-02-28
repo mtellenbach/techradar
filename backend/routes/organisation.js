@@ -10,8 +10,9 @@ router.post('/create', verify(['sysadmin']), async (req, res) => {
     try {
         const organisation = new Organisation({ name });
         await organisation.save();
-        return res.status(201).json({ message: 'Organisation created successfully' });
+        return res.status(201).json(organisation);
     } catch (error) {
+        console.log(req.body, error)
         return res.status(500).json({ error: "Could not create organisation" });
     }
 })
@@ -27,7 +28,7 @@ router.get('/', verify(['sysadmin']), async (req, res) => {
 
 router.get('/:id', verify(['sysadmin']), async (req, res) => {
     try {
-        const organisations = await Organisation.findOne({ organisation_id: req.params.id });
+        const organisations = await Organisation.findOne({ _id: req.params.id });
         return res.status(200).json(organisations);
     } catch (error) {
         return res.status(500).json({ error: 'Unable to find organisations' });
@@ -36,9 +37,9 @@ router.get('/:id', verify(['sysadmin']), async (req, res) => {
 
 router.put('/', verify(['sysadmin']), async (req, res) => {
     try {
-        const { organisation_id, name } = req.body;
+        const { id, name } = req.body;
         const organisation = await Organisation.findOneAndUpdate(
-            { organisation_id: organisation_id },
+            { _id: id },
             { name: name });
         return res.status(200).json(`Updated organisation ${organisation.name}`);
     } catch (error) {

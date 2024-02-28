@@ -1,7 +1,6 @@
 const mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    bcrypt = require('bcrypt'),
-    SALT_WORK_FACTOR = 10;
+    bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 
 const UserSchema = new Schema({
@@ -10,11 +9,15 @@ const UserSchema = new Schema({
     password: { type: String, required: true },
     email: { type: String, index: { unique: true } },
     role: { type: String },
-    organisation_id: { type: String, required: true, ref: 'Organisation' },
+    organisation_id: { type: mongoose.Types.ObjectId, required: true, ref: 'Organisation' },
     created_at: { type: Date, default: Date.now() },
     last_login: { type: Date },
     updated_at: { type: Date },
-    deleted_at: { type: Date }
+    deleted_at: { type: Date },
+    technologies: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Technology'
+    }]
 });
 
 UserSchema.pre('save', async function(next) {

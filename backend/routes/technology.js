@@ -4,6 +4,8 @@ const Technology = require('../models/technology');
 const ChangeLog = require('../models/changelog');
 const verify = require("../middleware/authMiddleware");
 
+const { v4: uuidv4 } = require('uuid');
+
 require('dotenv').config({ path: '/../.env' })
 
 router.post('/create', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
@@ -18,13 +20,11 @@ router.post('/create', verify(['sysadmin', 'cto', 'techlead']), async (req, res)
             is_published: req.body.is_published
         });
         await technology.save();
-        const changelog = new ChangeLog({
-            technology_id: technology.technology_id,
-            version_increment: 1
-        })
-        await changelog.save();
-        return res.status(201).json(technology);
+        const changelog = createChangeLog(technology);
+        technology.changelogs.push(changelog._id);
+        return res.status(200).json(technology);
     } catch (error) {
+        console.log(error)
         return res.status(500).json({ error: "Could not create technology" });
     }
 })
@@ -40,12 +40,26 @@ router.get('/', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
     }
 });
 
-router.get('/:id', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
+
+router.get('/getByOrg/:id/isPublished', verify(['sysadmin', 'cto', 'techlead', 'user']), async (req, res) => {
+    try {
+        const technology = await Technology.find({
+            organisation_id: req.params.id,
+            is_published: 1,
+            deleted_at: null
+        }).populate(['changelogs', 'organisation_id', 'user_id']).exec();
+        return res.status(200).json(technology);
+    } catch (error) {
+        return res.status(500).json({ error: 'Unable to find organisations' });
+    }
+});
+
+router.get('/:id', verify(['sysadmin', 'cto', 'techlead', 'user']), async (req, res) => {
     try {
         const technology = await Technology.findOne({
-            technology_id: req.params.id,
+            _id: req.params.id,
             deleted_at: null
-        });
+        }).populate(['changelogs', 'organisation_id', 'user_id']).exec();
         return res.status(200).json(technology);
     } catch (error) {
         return res.status(500).json({ error: 'Unable to find technologies' });
@@ -57,7 +71,7 @@ router.get('/getByOrg/:organisation_id', verify(['sysadmin', 'cto', 'techlead', 
         const technologies = await Technology.find({
             organisation_id: req.params.organisation_id,
             deleted_at: null
-        });
+        }).populate(['changelogs', 'organisation_id', 'user_id']).exec();
         return res.status(200).json(technologies);
     } catch (error) {
         return res.status(500).json({ error: 'Unable to find technologies' });
@@ -68,7 +82,7 @@ router.put('/', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
     try {
         const technology = await Technology.findOneAndUpdate(
             {
-                technology_id: req.body.technology_id,
+                _id: req.body._id,
                 deleted_at: null
             },
             {
@@ -81,10 +95,11 @@ router.put('/', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
                 is_published: req.body.is_published,
                 updated_at: Date.now()
             });
-
-        await createChangeLog(technology.technology_id)
+        const changelog = createChangeLog(technology);
+        technology.changelogs.push(changelog._id);
         return res.status(200).json(technology);
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ error: 'Could not update technology' });
     }
 });
@@ -94,14 +109,14 @@ router.put('/publish', verify(['sysadmin', 'cto', 'techlead']), async (req, res)
         const { technology_id, is_published } = req.body;
         const technology = await Technology.findOneAndUpdate(
             {
-                technology_id: technology_id,
+                _id: technology_id,
                 deleted_at: null
             },
             {
                 is_published: is_published,
                 updated_at: Date.now()
             });
-        await createChangeLog(technology.technology_id)
+        await createChangeLog(technology)
         return res.status(200).json(technology);
     } catch (error) {
         return res.status(500).json({ error: 'Could not update technology' });
@@ -123,14 +138,20 @@ router.put('/delete', verify(['sysadmin', 'cto', 'techlead']), async (req, res) 
     }
 })
 
-async function createChangeLog(id) {
-    const latestTechnologyChangeLog = await ChangeLog.findOne({ technology_id: id })
+async function createChangeLog(technology) {
+    const latestTechnologyChangeLog = await ChangeLog.findOne({ technology_id: technology.id })
         .sort([['created_at', -1]]).limit(1).exec();
+    let version_increment = 0;
+    if (latestTechnologyChangeLog) {
+        version_increment = latestTechnologyChangeLog.version_increment
+    }
     const changeLog = new ChangeLog({
-        technology_id: id,
-        version_increment: parseInt(latestTechnologyChangeLog.version_increment) + 1
+        technology_id: technology.id,
+        version_increment: parseInt(version_increment) + 1,
+        changelog_id: uuidv4()
     });
     await changeLog.save();
+    return changeLog;
 }
 
 module.exports = router;
