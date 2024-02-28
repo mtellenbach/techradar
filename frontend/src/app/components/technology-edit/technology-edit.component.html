@@ -1,1 +1,38 @@
-<p>technology-edit works!</p>
+<h2>{{technology?.name}}</h2>
+<div>
+    <form (ngSubmit)="onSubmit()">
+        <input type="hidden"  name="technology_id" id="technology_id" value="{{technology?._id}}" [(ngModel)]="id" />
+        <input type="hidden"  name="organisation_id" id="organisation_id" value="{{technology?.organisation_id}}"  [(ngModel)]="organisation_id"/>
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{technology?.name}}" [(ngModel)]="name">
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" value="{{technology?.description}}" [(ngModel)]="description"></textarea>
+        </div>
+        <div>
+            <label for="maturity">Maturity:</label>
+            <select name="maturity" id="maturity" [(ngModel)]="maturity">
+                <option value="1" [selected]="technology?.maturity === '1'">assess</option>
+                <option value="2" [selected]="technology?.maturity === '2'">trial</option>
+                <option value="3" [selected]="technology?.maturity === '3'">adopt</option>
+                <option value="4" [selected]="technology?.maturity === '4'">hold</option>
+            </select>
+        </div>
+        <div>
+            <label for="type">Type:</label>
+            <select name="type" id="type" [(ngModel)]="type">
+                <option value="1" [selected]="technology?.type === '1'">Techniques</option>
+                <option value="2" [selected]="technology?.type === '2'">Tools</option>
+                <option value="3" [selected]="technology?.type === '3'">Platforms</option>
+                <option value="4" [selected]="technology?.type === '4'">Language & Frameworks</option>
+            </select>
+        </div>
+        <div>
+            <input type="checkbox" name="is_published" id="is_published" [checked]="technology?.is_published" [(ngModel)]="is_published">
+            <label for="is_published">Is published?</label>
+        </div>
+        <button type="submit">Update</button>
+    </form>
+</div>

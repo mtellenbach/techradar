@@ -1,1 +1,17 @@
-<p>users works!</p>
+<a class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" routerLink="/user/create" class="btn btn-sm btn-primary">New</a>
+<table class="table-auto w-full">
+    <thead>
+    <th class="text-left">Name</th>
+    <th class="text-left">E-Mail</th>
+    <th class="text-left">Organisation</th>
+    <th></th>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+        <td>{{user.username}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.organisation_id?.name}}</td>
+        <td><a routerLink="/user/edit/{{user._id}}">Edit</a></td>
+    </tr>
+    </tbody>
+</table>

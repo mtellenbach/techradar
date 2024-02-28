@@ -1,1 +1,21 @@
-<p>technology-detail works!</p>
+<h2>{{technology?.name}}</h2>
+<dl>
+    <dt>Description</dt>
+    <dd>{{technology?.description}}</dd>
+    <dt>Maturity</dt>
+    <dd>{{technology?.maturity}}</dd>
+    <dt>Type</dt>
+    <dd>{{technology?.type}}</dd>
+    <dt>Created</dt>
+    <dd>{{technology?.created_at}}</dd>
+</dl>
+
+<div *ngIf="user?.role !== 'user' && technology?.changelogs">
+    <h3>ChangeLogs</h3>
+    <ul>
+        <li *ngFor="let changelog of technology?.changelogs">
+            Version: {{changelog.version_increment}}, Created: {{changelog.created_at}}
+        </li>
+    </ul>
+</div>
+

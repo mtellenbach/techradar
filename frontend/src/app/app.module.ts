@@ -1,6 +1,6 @@
-import {NgModule} from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -16,8 +16,12 @@ import { OrganisationCreateComponent } from './components/organisation-create/or
 import { TechnologyCreateComponent } from './components/technology-create/technology-create.component';
 import { UserCreateComponent } from './components/user-create/user-create.component';
 import { UserEditComponent } from './components/user-edit/user-edit.component';
+import { registerLocaleData } from '@angular/common';
+import localeDECH from '@angular/common/locales/de-CH';
+import {AuthService} from "./services/auth.service";
+import {User} from "./models/user.type";
 
-
+registerLocaleData(localeDECH)
 @NgModule({
     declarations: [
         AppComponent,
@@ -37,9 +41,13 @@ import { UserEditComponent } from './components/user-edit/user-edit.component';
         BrowserModule,
         AppRoutingModule,
         FormsModule,
-        HttpClientModule
+        HttpClientModule,
+        ReactiveFormsModule
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    providers: [
+        {provide: LOCALE_ID, useValue: 'de-ch'}
+    ]
 })
 export class AppModule {
 }

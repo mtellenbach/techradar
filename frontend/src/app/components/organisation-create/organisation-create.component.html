@@ -1,1 +1,10 @@
-<p>organisation-create works!</p>
+<div>
+    <h2>Create Organisation</h2>
+    <form (ngSubmit)="onSubmit()">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" [(ngModel)]="name">
+        </div>
+        <button type="submit">Create</button>
+    </form>
+</div>

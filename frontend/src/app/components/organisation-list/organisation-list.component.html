@@ -1,1 +1,15 @@
-<p>organisation-list works!</p>
+<a routerLink="/organisation/create" class="btn btn-sm btn-primary">New</a>
+<table>
+    <thead>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    </thead>
+    <tbody>
+    <tr *ngFor="let organisation of organisations">
+        <td>{{organisation.name}}</td>
+        <td><a routerLink="/organisation/detail/{{organisation._id}}">Detail</a></td>
+        <td><a routerLink="/organisation/edit/{{organisation._id}}">Edit</a></td>
+    </tr>
+    </tbody>
+</table>

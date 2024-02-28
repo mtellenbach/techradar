@@ -1,1 +1,46 @@
-<p>technology-create works!</p>
+<div>
+    <h2>Create Tech</h2>
+    <form (ngSubmit)="onSubmit()">
+        <input type="hidden"  name="organisation" id="organisation" [(ngModel)]="organisation_id" *ngIf="user?.role !== 'sysadmin'" />
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" [(ngModel)]="name">
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" [(ngModel)]="description"></textarea>
+        </div>
+        <div *ngIf="user?.role === 'sysadmin'">
+            <label for="organisation">Organisation:</label>
+            <select name="organisation" id="organisation" [(ngModel)]="organisation_id">
+                <option *ngFor="let o of organisations"
+                        [value]="o.organisation_id">
+                    {{o.name}}
+                </option>
+            </select>
+        </div>
+        <div>
+            <label for="maturity">Maturity:</label>
+            <select name="maturity" id="maturity" [(ngModel)]="maturity">
+                <option value="1">assess</option>
+                <option value="2">trial</option>
+                <option value="3">adopt</option>
+                <option value="4">hold</option>
+            </select>
+        </div>
+        <div>
+            <label for="type">Type:</label>
+            <select name="type" id="type" [(ngModel)]="type">
+                <option value="1">Techniques</option>
+                <option value="2">Tools</option>
+                <option value="3">Platforms</option>
+                <option value="4">Language & Frameworks</option>
+            </select>
+        </div>
+        <div>
+            <input type="checkbox" name="is_published" id="is_published" [(ngModel)]="is_published">
+            <label for="is_published">Is published?</label>
+        </div>
+        <button type="submit">Create</button>
+    </form>
+</div>

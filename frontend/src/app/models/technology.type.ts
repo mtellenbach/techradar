@@ -13,5 +13,5 @@ export interface Technology {
   created_at: string;
   updated_at: string|null;
   deleted_at: string|null;
-  changelogs: Array<ChangeLog>;
+  changelogs: ChangeLog[]|null;
 }

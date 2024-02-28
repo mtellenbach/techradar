@@ -1,36 +1,51 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
 import {AuthService} from "../../services/auth.service";
+import {Subscription} from "rxjs";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
+    loginForm: FormGroup;
 
-  constructor(private http: HttpClient, private router: Router, private auth: AuthService) {}
-
-  ngOnInit() {
-    if (this.auth.isLoggedIn()){
-      this.router.navigate(['/dashboard'])
+    constructor(private http: HttpClient, private router: Router, private auth: AuthService, private formBuilder: FormBuilder) {
+        this.loginForm = this.formBuilder.group({
+            username: ['', Validators.required],
+            password: ['', Validators.required]
+        });
     }
-  }
 
-  login() {
-    this.http.post<any>('http://localhost:3000/users/login', { username: this.username, password: this.password })
-      .subscribe(
-        response => {
-          const token = response.token;
-          localStorage.setItem('token', token);
-          this.router.navigate(['/dashboard']);
-        },
-        error => {
-          console.error('Login failed:', error);
+    ngOnInit() {
+        if (this.auth.isLoggedIn()) {
+            this.router.navigate(['/dashboard']);
         }
-      );
-  }
+    }
+
+    login() {
+        if (this.loginForm.valid) {
+            const username = this.loginForm.get('username')?.value;
+            const password = this.loginForm.get('password')?.value;
+            this.auth.login({ username, password });
+        } else {
+            this.loginForm.markAllAsTouched();
+        }
+    }
+
+    isFieldValid(field: string) {
+        const formControl = this.loginForm.get(field);
+        return formControl?.touched && formControl.invalid;
+    }
+
+    getErrorMessage(field: string) {
+        const formControl = this.loginForm.get(field);
+        if (formControl?.hasError('required')) {
+            return 'Dieses Feld ist erforderlich';
+        }
+        return;
+    }
 }
