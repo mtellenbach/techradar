@@ -50,3 +50,49 @@ export function typeMaturityConverter(technology: Technology): Converted {
 
   return converted;
 }
+
+export function reConvertTypeMaturity(technology: Technology): Converted {
+  let converted: Converted = {
+    type: "undefined",
+    maturity: "undefined"
+  }
+  if (technology && technology.type && technology.maturity) {
+    switch (technology.type.toString()) {
+      case "Techniques":
+        converted.type = "1";
+        break;
+      case "Tools":
+        converted.type = "2";
+        break;
+      case "Platforms":
+        converted.type = "3";
+        break;
+      case "Language & Frameworks":
+        converted.type = "4";
+        break;
+      default:
+        converted.type = "undefined";
+        break;
+    }
+
+    switch (technology.maturity.toString()) {
+      case "assess":
+        converted.maturity = "1";
+        break;
+      case "trial":
+        converted.maturity = "2";
+        break;
+      case "adopt":
+        converted.maturity = "3";
+        break;
+      case "hold":
+        converted.maturity = "4";
+        break;
+      default:
+        converted.maturity = "undefined";
+        break;
+    }
+  }
+
+  return converted;
+}

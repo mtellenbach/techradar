@@ -6,7 +6,7 @@ import {User} from "../../models/user.type";
 import {Technology} from "../../models/technology.type";
 import {catchError, finalize, map, Observable, toArray} from "rxjs";
 import {ThreeMFLoader} from "three/examples/jsm/loaders/3MFLoader";
-import {Converted, typeMaturityConverter} from "../../helpers/type-maturity.helper";
+import {Converted, reConvertTypeMaturity, typeMaturityConverter} from "../../helpers/type-maturity.helper";
 
 @Component({
     selector: 'app-dashboard',
@@ -169,7 +169,11 @@ export class DashboardComponent {
 
     if (this.technologies) {
       this.technologies?.forEach((tech) => {
-        const { type, maturity } = tech;
+        let tmpTech: Technology = JSON.parse(JSON.stringify(tech));
+        const reconvert: Converted = reConvertTypeMaturity(tech)
+        tmpTech.maturity = reconvert.maturity;
+        tmpTech.type = reconvert.type;
+        const { type, maturity } = tmpTech;
         const { x, y } = calculatePosition(type, maturity);
         drawTechnology(x, y);
       })
