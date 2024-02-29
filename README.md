@@ -36,6 +36,8 @@ MONGODB_URI=mongodb://<your_mongo_db_uri>
 2. Run `npm i` to install all required Node.js-Packages
 3. Run `nodemon start` to start the application at http://localhost:3000
 
+If you wish to only test the API-calls, you can import the file `Insomnia.json` (for Insomnia: https://insomnia.rest/) or follow this instruction to import the json to Postman: https://learning.postman.com/docs/getting-started/importing-and-exporting/importing-from-insomnia/.
+
 ### Frontend
 1. Open the terminal and change the directory to `frontend`
 2. Run `npm i` to install all required Node.js-Packages
