@@ -4,6 +4,7 @@
 - Create and login to a MongoDB-Instance (e.g. at https://cloud.mongodb.com/)
 - Manually create the collections `organisations` and `users`
 - Manually create your first organisation and it's sysadmin inside the collection
+- Optional: Insomnia (https://insomnia.rest/) or Postman (https://www.postman.com/downloads/) installed
 
 You can use the following Documents:
 ```Organisation
