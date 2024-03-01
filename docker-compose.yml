@@ -16,24 +16,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    environment:
-      - MONGODB_URI=${MONGODB_URI}
     networks:
       - app-network
-
-#  mongo:
-#    image: mongo
-#    restart: always
-#    ports:
-#      - '27017:27017'
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: 'root'
-#      MONGO_INITDB_ROOT_PASSWORD: 'example'
-#    networks:
-#      - app-network
-#
-#volumes:
-#  dbdata:
 
 networks:
   app-network:

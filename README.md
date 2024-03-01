@@ -32,6 +32,13 @@ MONGODB_URI=mongodb://<your_mongo_db_uri>
 ```
 
 ## Start up
+### Using Docker
+1. Open the terminal and run `docker-compose up`
+2. Open http://localhost to see the Angular frontend
+
+**Keep in mind that changes won't reload while developing.
+Use the following methods instead:**
+
 ### Backend
 1. Open the terminal and change the directory to `backend`
 2. Run `npm i` to install all required Node.js-Packages
