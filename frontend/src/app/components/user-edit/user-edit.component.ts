@@ -13,7 +13,7 @@ import {environment} from "../../../environments/environments";
 })
 export class UserEditComponent {
     apiUrl = environment.apiUrl;
-    currentUser: User | null = null;
+    currentUser: User | null = this.auth.getCurrentUser();
     username: string | null = "";
     password: string = "";
     email: string | null = "";
@@ -56,6 +56,7 @@ export class UserEditComponent {
     onSubmit() {
         const endpoint = `${this.apiUrl}/users`
         const body = {
+            user_id: this.user_id,
             username: this.username,
             password: this.password,
             organisation_id: this.organisation_id,

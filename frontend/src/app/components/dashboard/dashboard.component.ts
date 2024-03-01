@@ -30,7 +30,7 @@ export class DashboardComponent {
     fetchTechnologies() {
 
       // @ts-ignore
-      let endpoint: string | null = `${this.baseurl}/getByOrg/${this.auth.getCurrentUser()?.organisation_id?._id}`;
+      let endpoint: string | null = `${this.apiUrl}/technologies/getByOrg/${this.auth.getCurrentUser()?.organisation_id?._id}`;
 
       // @ts-ignore
       if (this.auth.getCurrentUser()?.role  === "sysadmin") {

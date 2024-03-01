@@ -7,8 +7,9 @@ require('dotenv').config({ path: '/../.env' })
 
 router.post('/create', verify(['sysadmin']), async (req, res) => {
     const { name } = req.body;
+    const uuid = require("uuid");
     try {
-        const organisation = new Organisation({ name });
+        const organisation = new Organisation({ name, organisation_id: uuid.v4() });
         await organisation.save();
         return res.status(201).json(organisation);
     } catch (error) {

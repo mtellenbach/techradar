@@ -4,13 +4,14 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const Organisation = require("../models/organisation");
 const verify = require('./../middleware/authMiddleware')
-const {v4: uuidv4} = require("uuid");
 const mongoose = require("mongoose");
 
 
 router.post('/create', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
+    const uuid = require('uuid');
     try {
         const user = new User({
+            user_id: uuid.v4(),
             username: req.body.username,
             password: req.body.password,
             organisation_id: req.body.organisation_id,
@@ -18,7 +19,6 @@ router.post('/create', verify(['sysadmin', 'cto', 'techlead']), async (req, res)
             email: req.body.email
         });
         await user.save();
-        console.log(req.body)
         return res.status(201).json({message: 'User registered successfully' + user});
     } catch (error) {
         console.log(error)
@@ -94,7 +94,7 @@ router.put('/', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
     try {
         const user = await User.findOneAndUpdate(
             {
-                _id: req.body.user_id,
+                user_id: req.body.user_id,
                 deleted_at: null
             },
             {

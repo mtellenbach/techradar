@@ -13,7 +13,7 @@ import {environment} from "../../../environments/environments";
 })
 export class UserCreateComponent {
     apiUrl = environment.apiUrl;
-    currentUser: User | null = null;
+    currentUser: User | null = this.auth.getCurrentUser();
     username: string = "";
     password: string = "";
     email: string = "";

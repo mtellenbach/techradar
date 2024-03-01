@@ -10,20 +10,32 @@ import {Subscription} from "rxjs";
     styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-    user: User | null = this.auth.getCurrentUser();
+    user: User | null = null;
     isLoggedIn = false;
     private subscription: Subscription;
 
     constructor(private auth: AuthService, private router: Router) {
         this.subscription = this.auth.loggedIn.subscribe((isLoggedIn) => {
             this.isLoggedIn = isLoggedIn;
+            if (!this.isLoggedIn) {
+              this.user = null;
+              this.router.navigate(['/']);
+            } else {
+              this.user = this.auth.getCurrentUser();
+            }
         });
     }
 
     ngOnInit() {
-        this.subscription = this.auth.loggedIn.subscribe((isLoggedIn) => {
-            this.isLoggedIn = isLoggedIn;
-        });
+      this.subscription = this.auth.loggedIn.subscribe((isLoggedIn) => {
+        this.isLoggedIn = isLoggedIn;
+        if (!this.isLoggedIn) {
+          this.user = null;
+          this.router.navigate(['/']);
+        } else {
+          this.user = this.auth.getCurrentUser();
+        }
+      });
     }
 
     ngOnDestroy() {

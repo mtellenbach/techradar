@@ -42,9 +42,6 @@ export class AuthService {
     }
 
     getCurrentUser(): User | null {
-        if (this.user !== null) {
-          this.is_loggedIn.next(true);
-        }
         return this.user;
     }
 
@@ -66,6 +63,8 @@ export class AuthService {
         this.is_loggedIn.next(true);
         return true;
     }
+
+
 
     isPermitted(roles: Array<string>): void {
         if (!this.getCurrentUser()) {

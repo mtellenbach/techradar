@@ -2,6 +2,7 @@
     <h2>Create User</h2>
     <form (ngSubmit)="onSubmit()">
         <input type="hidden"  name="organisation" id="organisation" [(ngModel)]="organisation_id" />
+        <input type="hidden"  name="organisation" id="organisation" [(ngModel)]="user_id" />
         <div>
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" [(ngModel)]="username">

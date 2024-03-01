@@ -4,13 +4,13 @@ const Technology = require('../models/technology');
 const ChangeLog = require('../models/changelog');
 const verify = require("../middleware/authMiddleware");
 
-const { v4: uuidv4 } = require('uuid');
-
 require('dotenv').config({ path: '/../.env' })
 
 router.post('/create', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
     try {
+        const uuid = require("uuid");
         const technology = new Technology({
+            technology_id: uuid.v4(),
             user_id: req.body.user_id,
             organisation_id: req.body.organisation_id,
             name: req.body.name,
@@ -136,7 +136,7 @@ router.delete('/:id', verify(['sysadmin', 'cto', 'techlead']), async (req, res) 
 })
 
 async function createChangeLog(technology) {
-    console.log(technology.id)
+    const uuid = require('uuid')
     const latestTechnologyChangeLog = await ChangeLog.findOne({ technology_id: technology.id })
         .sort([['created_at', -1]]).limit(1).exec();
     let version_increment = 0;
@@ -146,7 +146,7 @@ async function createChangeLog(technology) {
     const changeLog = new ChangeLog({
         technology_id: technology.id,
         version_increment: parseInt(version_increment) + 1,
-        changelog_id: uuidv4()
+        changelog_id: uuid.v4()
     });
     await changeLog.save();
     return changeLog;

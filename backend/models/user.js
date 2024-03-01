@@ -1,10 +1,9 @@
 const mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     bcrypt = require('bcrypt');
-const { v4: uuidv4 } = require('uuid');
 
 const UserSchema = new Schema({
-    user_id: { type: String, default: uuidv4() },
+    user_id: { type: String, required: true, index: { unique: true } },
     username: { type: String, index: { unique: true } },
     password: { type: String, required: true },
     email: { type: String, index: { unique: true } },
@@ -25,7 +24,7 @@ UserSchema.pre('save', async function(next) {
     if (!user.isModified('password')) return next();
 
     try {
-        const salt = await bcrypt.genSalt(process.env.SALT_ROUNDS);
+        const salt = await bcrypt.genSalt(parseInt(process.env.SALT_ROUNDS));
         user.password = await bcrypt.hash(user.password, salt);
         next();
     } catch (error) {
