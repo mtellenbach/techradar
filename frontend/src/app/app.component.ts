@@ -18,24 +18,24 @@ export class AppComponent {
         this.subscription = this.auth.loggedIn.subscribe((isLoggedIn) => {
             this.isLoggedIn = isLoggedIn;
             if (!this.isLoggedIn) {
-              this.user = null;
-              this.router.navigate(['/']);
+                this.user = null;
+                this.router.navigate(['/']);
             } else {
-              this.user = this.auth.getCurrentUser();
+                this.user = this.auth.getCurrentUser();
             }
         });
     }
 
     ngOnInit() {
-      this.subscription = this.auth.loggedIn.subscribe((isLoggedIn) => {
-        this.isLoggedIn = isLoggedIn;
-        if (!this.isLoggedIn) {
-          this.user = null;
-          this.router.navigate(['/']);
-        } else {
-          this.user = this.auth.getCurrentUser();
-        }
-      });
+        this.subscription = this.auth.loggedIn.subscribe((isLoggedIn) => {
+            this.isLoggedIn = isLoggedIn;
+            if (!this.isLoggedIn) {
+                this.user = null;
+                this.router.navigate(['/']);
+            } else {
+                this.user = this.auth.getCurrentUser();
+            }
+        });
     }
 
     ngOnDestroy() {

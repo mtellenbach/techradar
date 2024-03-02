@@ -23,7 +23,9 @@ describe('typeMaturityConverter', () => {
     const expectedMaturity: string = "adopt";
 
     const result = typeMaturityConverter(technology);
-    expect(expectedType).toBe(result.type);
-    expect(expectedMaturity).toBe(result.maturity)
+    // @ts-ignore
+      expect(expectedType).toBe(result.type);
+    // @ts-ignore
+      expect(expectedMaturity).toBe(result.maturity)
   });
 });

@@ -167,7 +167,7 @@ export class DashboardComponent {
     };
 
     if (this.technologies) {
-      this.technologies?.forEach((tech) => {
+      this.technologies.forEach((tech) => {
         let tmpTech: Technology = JSON.parse(JSON.stringify(tech));
         const reconvert: Converted = reConvertTypeMaturity(tech)
         tmpTech.maturity = reconvert.maturity;
