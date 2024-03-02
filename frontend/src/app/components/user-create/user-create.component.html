@@ -1,37 +1,50 @@
 <div>
     <h2>Create User</h2>
-    <form (ngSubmit)="onSubmit()">
-        <input type="hidden"  name="organisation" id="organisation" [(ngModel)]="organisation_id" *ngIf="currentUser?.role !== 'sysadmin'" />
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" [(ngModel)]="username">
+    <form (ngSubmit)="onSubmit()" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+               type="hidden" name="organisation" id="organisation" [(ngModel)]="organisation_id"
+               *ngIf="currentUser?.role !== 'sysadmin'"/>
+        <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Username:</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                   type="text" id="username" name="username" [(ngModel)]="username">
         </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" [(ngModel)]="password" />
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password:</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                   type="password" id="password" name="password" [(ngModel)]="password"/>
         </div>
-        <div>
-            <label for="email">E-Mail:</label>
-            <input type="email" id="email" name="email" [(ngModel)]="email">
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="email">E-Mail:</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                   type="email" id="email" name="email" [(ngModel)]="email">
         </div>
-        <div *ngIf="currentUser?.role === 'sysadmin'">
-            <label for="organisation">Organisation:</label>
-            <select name="organisation" id="organisation" [(ngModel)]="organisation_id">
+        <div class="mb-4" *ngIf="currentUser?.role === 'sysadmin'">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="organisation">Organisation:</label>
+            <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    name="organisation" id="organisation" [(ngModel)]="organisation_id">
                 <option *ngFor="let o of organisations"
                         [value]="o._id">
-                    {{o.name}}
+                    {{ o.name }}
                 </option>
             </select>
         </div>
-        <div>
-            <label for="role">Role:</label>
-            <select name="role" id="role" [(ngModel)]="role">
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="role">Role:</label>
+            <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    name="role" id="role" [(ngModel)]="role">
                 <option value="sysadmin">Sys-Admin</option>
                 <option value="cto">CTO</option>
                 <option value="techlead">Tech-Lead</option>
                 <option value="user">User</option>
             </select>
         </div>
-        <button type="submit">Create</button> <a routerLink="/users">back</a>
+        <div class="flex justify-between">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="submit">Create
+            </button>
+            <a class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+               routerLink="/users">back</a>
+        </div>
     </form>
 </div>
