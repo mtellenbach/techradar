@@ -23,6 +23,10 @@ export class UsersComponent {
     }
 
     private getUsers() {
+        if (!(this.apiUrl && this.auth.getCurrentUser())) {
+            this.router.navigate(['/']);
+        }
+
         if (!this.auth.getCurrentUser() && this.auth.isLoggedIn()) {
             this.router.navigate(['/']);
         }
@@ -30,10 +34,8 @@ export class UsersComponent {
             this.router.navigate(['/dashboard']);
         }
 
-        // @ts-ignore
         let endpoint: string | null = `${this.apiUrl}/users/getByOrg/${this.auth.getCurrentUser()?.organisation_id?._id}`;
 
-        // @ts-ignore
         if (this.auth.getCurrentUser()?.role  === "sysadmin") {
             endpoint = `${this.apiUrl}/users`
         }

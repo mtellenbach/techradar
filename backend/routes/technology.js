@@ -34,7 +34,7 @@ router.get('/', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
     try {
         const technology = await Technology.find({
             deleted_at: null
-        });
+        }).sort('type');
         return res.status(200).json(technology);
     } catch (error) {
         return res.status(500).json({ error: 'Unable to find organisations' });
@@ -48,7 +48,7 @@ router.get('/getByOrg/:id/isPublished', verify(['sysadmin', 'cto', 'techlead', '
             organisation_id: req.params.id,
             is_published: 1,
             deleted_at: null
-        }).populate(['changelogs', 'organisation_id', 'user_id']).exec();
+        }).sort('type').populate(['changelogs', 'organisation_id', 'user_id']).exec();
         return res.status(200).json(technology);
     } catch (error) {
         return res.status(500).json({ error: 'Unable to find organisations' });
@@ -72,7 +72,7 @@ router.get('/getByOrg/:organisation_id', verify(['sysadmin', 'cto', 'techlead', 
         const technologies = await Technology.find({
             organisation_id: req.params.organisation_id,
             deleted_at: null
-        }).populate(['changelogs', 'organisation_id', 'user_id']).exec();
+        }).sort('type').populate(['changelogs', 'organisation_id', 'user_id']).exec();
         return res.status(200).json(technologies);
     } catch (error) {
         return res.status(500).json({ error: 'Unable to find technologies' });
