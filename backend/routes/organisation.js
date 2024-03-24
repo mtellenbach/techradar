@@ -7,9 +7,8 @@ require('dotenv').config({ path: '/../.env' })
 
 router.post('/create', verify(['sysadmin']), async (req, res) => {
     const { name } = req.body;
-    const uuid = require("uuid");
     try {
-        const organisation = new Organisation({ name, organisation_id: uuid.v4() });
+        const organisation = new Organisation({ name });
         await organisation.save();
         return res.status(201).json(organisation);
     } catch (error) {
@@ -51,7 +50,7 @@ router.put('/', verify(['sysadmin']), async (req, res) => {
 router.delete('/', verify(['sysadmin']), async (req, res) => {
     try {
         const { organisation_id } = req.body;
-        const organisation = await Organisation.findOneAndDelete({ organisation_id: organisation_id });
+        const organisation = await Organisation.findOneAndDelete({ _id: organisation_id });
         return res.status(200).json(`Deleted organisation ${organisation.name}`);
     } catch (error) {
         console.log(error)

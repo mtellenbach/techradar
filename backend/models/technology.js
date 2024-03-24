@@ -1,9 +1,7 @@
 const mongoose = require('mongoose'),
     Schema = mongoose.Schema;
-const uuid = require("uuid");
 
 const TechnologySchema = new Schema({
-    technology_id: { type: String, required: true, index: { unique: true } },
     user_id: { type: mongoose.Types.ObjectId, required: true, ref: 'User' },
     organisation_id: { type: mongoose.Types.ObjectId, required: true, ref: 'Organisation' },
     name: { type: String, required: true },

@@ -8,9 +8,7 @@ require('dotenv').config({ path: '/../.env' })
 
 router.post('/create', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
     try {
-        const uuid = require("uuid");
         const technology = new Technology({
-            technology_id: uuid.v4(),
             user_id: req.body.user_id,
             organisation_id: req.body.organisation_id,
             name: req.body.name,
@@ -136,17 +134,15 @@ router.delete('/:id', verify(['sysadmin', 'cto', 'techlead']), async (req, res) 
 })
 
 async function createChangeLog(technology) {
-    const uuid = require('uuid')
-    const latestTechnologyChangeLog = await ChangeLog.findOne({ technology_id: technology.id })
+    const latestTechnologyChangeLog = await ChangeLog.findOne({ technology_id: technology._id })
         .sort([['created_at', -1]]).limit(1).exec();
     let version_increment = 0;
     if (latestTechnologyChangeLog) {
         version_increment = latestTechnologyChangeLog.version_increment
     }
     const changeLog = new ChangeLog({
-        technology_id: technology.id,
-        version_increment: parseInt(version_increment) + 1,
-        changelog_id: uuid.v4()
+        technology_id: technology._id,
+        version_increment: parseInt(version_increment) + 1
     });
     await changeLog.save();
     return changeLog;

@@ -4,14 +4,10 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const Organisation = require("../models/organisation");
 const verify = require('./../middleware/authMiddleware')
-const mongoose = require("mongoose");
-
 
 router.post('/create', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
-    const uuid = require('uuid');
     try {
         const user = new User({
-            user_id: uuid.v4(),
             username: req.body.username,
             password: req.body.password,
             organisation_id: req.body.organisation_id,
@@ -45,7 +41,7 @@ router.post('/login', async (req, res) => {
 
         const token = jwt.sign({
                 id: user._id,
-                userId: user.user_id,
+                userId: user._id,
                 role: user.role,
                 organisation_id: user.organisation_id
             },
@@ -94,11 +90,10 @@ router.put('/', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
     try {
         const user = await User.findOneAndUpdate(
             {
-                user_id: req.body.user_id,
+                _id: req.body.user_id,
                 deleted_at: null
             },
             {
-                user_id: req.body.user_id,
                 username: req.body.username,
                 password: req.body.password,
                 email: req.body.email,
@@ -116,7 +111,7 @@ router.put('/', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
 router.delete('/', verify(['sysadmin', 'cto', 'techlead']), async (req, res) => {
     try {
         const {user_id} = req.body;
-        const user = await Organisation.findOneAndDelete({user_id: user_id});
+        const user = await Organisation.findOneAndDelete({_id: user_id});
         return res.status(200).json(`Deleted user ${user.name}`);
     } catch (error) {
         console.log(error)
