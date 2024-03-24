@@ -1,7 +1,7 @@
 <div class="w-full mx-auto">
     <h2 class="mb-4">{{organisation?.name}}</h2>
     <form (ngSubmit)="onSubmit()" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <input type="hidden"  name="organisation_id" id="organisation_id" value="{{organisation?._id}}" [(ngModel)]="id"/>
+        <input type="hidden" disabled name="organisation_id" id="organisation_id" value="{{organisation?._id}}" [(ngModel)]="id"/>
         <div>
             <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name:</label>
             <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

@@ -18,6 +18,7 @@
 </div>
 
 <table class="table-auto w-full">
+  <caption>List of all technologies</caption>
     <thead>
     <th></th>
     <th class="pl-3 text-left">Name</th>
@@ -30,10 +31,10 @@
     </thead>
     <tbody>
     <tr *ngFor="let technology of technologies">
-      <th *ngIf="!technology.is_published">
+      <td *ngIf="!technology.is_published">
         <p class="inline-block text-xs border border-orange-500 rounded-full py-1 px-1 bg-orange-500 text-white cursor-pointer">unpublished</p>
-      </th>
-      <th *ngIf="technology.is_published"></th>
+      </td>
+      <td *ngIf="technology.is_published"></td>
         <td class="pl-3 py-3">{{technology.name}}</td>
         <td class="pl-3">{{technology.description}}</td>
         <td class="pl-3">{{technology.type}}</td>
